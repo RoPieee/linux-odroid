@@ -458,6 +458,21 @@ static int w5100_spi_probe(struct spi_device *spi)
 		return -EINVAL;
 	}
 
+	struct gpio_desc *gpiod;
+
+	gpiod = devm_gpiod_get_optional(&spi->dev, "irq", GPIOD_IN);
+	if (IS_ERR(gpiod)) {
+		int error = PTR_ERR(gpiod);
+		if (error != -EPROBE_DEFER) {
+			dev_err(&spi->dev, "failed to get %s GPIO: %d\n",
+					"irq-gpios", error);
+			return error;
+		}
+	}
+
+	if (gpiod)
+		spi->irq = gpiod_to_irq(gpiod);
+
 	return w5100_probe(&spi->dev, ops, priv_size, mac, spi->irq, -EINVAL);
 }
 
