@@ -1,6 +1,7 @@
 dtbo-y += \
 	can0.dtbo \
 	display_vu7c.dtbo \
+	hifishield.dtbo \
 	hifishield2.dtbo \
 	hktft32.dtbo \
 	hktft35.dtbo \
